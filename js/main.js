@@ -95,10 +95,7 @@ async function tapRobot() {
         return;
     }
 
-    let rndInt1 = Math.floor(Math.random() * 10) + 1;
-    while (lastSalute === rndInt1) {
-         rndInt1 = Math.floor(Math.random() * 10) + 1;
-    }
+    let rndInt1 = Math.floor(Math.random() * 4) + 1;
 
     setTimeout(() => {
         robotAnim("idle", 1, 500); 
@@ -121,7 +118,7 @@ async function tapRobot() {
             } else if (rndInt1 ===  4) {
                 salute = "Cuéntame";
             }
-            robotSpeech("Te escucho");
+            robotSpeech(salute);
         }, 300);
 
         setTimeout(() => {
@@ -131,7 +128,7 @@ async function tapRobot() {
             // detectInterval = setInterval(() => {
             //     detectFace();
             // }, 1000);
-        }, 600);
+        }, 1000);
     }, 100);
 }
 
