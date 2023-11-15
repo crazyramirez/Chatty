@@ -11,7 +11,4 @@ function activarPantallaCompleta() {
     } else if (elemento.msRequestFullscreen) { // Internet Explorer/Edge
       elemento.msRequestFullscreen();
     }
-  }
-  
-  // Llama a la función para activar el modo de pantalla completa cuando sea necesario
-  activarPantallaCompleta();
+}

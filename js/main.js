@@ -74,6 +74,7 @@ function enableSpeech() {
     var audioSrc = "../public/audio/ding.mp3"; // Agrega un parámetro de tiempo único
     audio.src = audioSrc;
     audio.play();
+    activarPantallaCompleta();
     document.getElementById("loadingDiv").style.display = "none";
 }
 
