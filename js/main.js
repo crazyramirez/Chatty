@@ -99,7 +99,6 @@ async function tapRobot() {
     while (lastSalute === rndInt1) {
          rndInt1 = Math.floor(Math.random() * 10) + 1;
     }
-    lastSalute = rndInt1;
 
     setTimeout(() => {
         robotAnim("idle", 1, 500); 
@@ -108,16 +107,32 @@ async function tapRobot() {
         var audioSrc = "../public/audio/start.mp3"; // Agrega un parámetro de tiempo único
         audio.src = audioSrc;
         audio.play(); 
-    }, 100);
-    setTimeout(() => {
-        document.getElementById("mic-icon").style.visibility = "visible";
-        startRecording();
 
-        // lastExpression = "Neutral";
-        // detectInterval = setInterval(() => {
-        //     detectFace();
-        // }, 1000);
-    }, 200);
+        setTimeout(() => {
+            robotAnim("talk", 2, 100);
+            let salute;
+            if (rndInt1 === 1)
+            {
+                salute = "Te escucho";
+            } else if (rndInt1 ===  2) {
+                salute = "Dime";
+            } else if (rndInt1 ===  3) {
+                salute = "Sí?";
+            } else if (rndInt1 ===  4) {
+                salute = "Cuéntame";
+            }
+            robotSpeech("Te escucho");
+        }, 300);
+
+        setTimeout(() => {
+            document.getElementById("mic-icon").style.visibility = "visible";
+            startRecording();
+            // lastExpression = "Neutral";
+            // detectInterval = setInterval(() => {
+            //     detectFace();
+            // }, 1000);
+        }, 600);
+    }, 100);
 }
 
 function robotAnim(type, subtype, time) {
