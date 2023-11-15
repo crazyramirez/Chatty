@@ -97,11 +97,6 @@ async function tapRobot() {
 
     setTimeout(() => {
         robotAnim("idle", 1, 500); 
-        audio.volume = 1;
-        var audioSrc = "../public/audio/start.mp3"; // Agrega un parámetro de tiempo único
-        audio.src = audioSrc;
-        audio.play(); 
-
         setTimeout(() => {
             let salute;
             if (rndInt1 === 1)

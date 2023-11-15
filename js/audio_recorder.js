@@ -1,5 +1,5 @@
 // Global Variables
-VOICE_MIN_DECIBELS      = -40;
+VOICE_MIN_DECIBELS      = -35;
 DELAY_BETWEEN_DIALOGS   = 1000;
 DIALOG_MAX_LENGTH       = 60*1000;
 MEDIA_RECORDER          = null;
