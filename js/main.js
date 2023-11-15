@@ -123,8 +123,8 @@ async function tapRobot() {
 function robotAnim(type, subtype, time) {
     let currentImageIndex = 0;
     let images = [
-    "./public/images/robot_" + type + "_" + subtype + "_1.png",
-    "./public/images/robot_" + type + "_" + subtype + "_2.png",
+    "./public/images/robot_" + type + "_" + subtype + "_1.webp",
+    "./public/images/robot_" + type + "_" + subtype + "_2.webp",
     ];
 
     clearInterval(interval);
