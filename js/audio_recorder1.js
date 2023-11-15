@@ -42,7 +42,7 @@ function record(){
         // MEDIA_RECORDER.stop();
         
         //start recording:
-        MEDIA_RECORDER.start();
+        MEDIA_RECORDER.start(1000);
         
         //save audio chunks:
         const audioChunks = [];
