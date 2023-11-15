@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>  
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <title>BJS App</title>
+    <!-- Main StyleSheet -->
+    <link rel="stylesheet" href="./css/main.css?id=1">
+    <!-- Bootstrap 5.0.2 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Loading DIV -->
+    <div id="loadingDiv">
+        <p id="loadingText" class="font-weight-light">L O A D I N G</p>
+        <span class="loader"></span>
+    </div>
+
+    <!-- Main Content -->   
+    <div class="main-container">
+        <div class="title">
+            <p>Chatty BOX</p>
+        </div>
+
+        <video id="video" autoplay muted playsinline style="display: none;"></video>
+        <div class="robot-container">
+            <img class="robot-img" id="robot-img" src="./public/images/robot_idle_1_1.png" id="robot-img"/>
+            <img src="./public/images/mic_icon.png" alt="" id="mic-icon" class="mic-icon" style="visibility: visible;">
+        </div>
+        <div class="message-container" id="message-container" style="display: flex;">
+            <p class="response show">Hola, ¿En qué te puedo ayudar?</p>
+            
+            <!-- <p class="message show">¿Cual es la capital de España?</p>
+            <p class="response show">Hola, la capital de España es Madrid.<br>¿Te puedo ayudar en otra cosa más?</p>
+            <p class="message show">¿Cual es la capital de España?</p>
+            <p class="response show">Hola, la capital de España es Madrid.<br>¿Te puedo ayudar en otra cosa más?</p>
+            <p class="message show">¿Cual es la capital de España?</p>
+            <p class="response show">Hola, la capital de España es Madrid.<br>¿Te puedo ayudar en otra cosa más?</p>
+            <p class="message show">¿Cual es la capital de España?</p>
+            <p class="response show">Hola, la capital de España es Madrid.<br>¿Te puedo ayudar en otra cosa más?</p>
+            <p class="message show">¿Cual es la capital de España?</p>
+            <p class="response show">Hola, la capital de España es Madrid.<br>¿Te puedo ayudar en otra cosa más?</p>
+            <p class="message show">¿Cual es la capital de España?</p>
+            <p class="response show">Hola, la capital de España es Madrid.<br>¿Te puedo ayudar en otra cosa más?</p>
+            <p class="message show">¿Cual es la capital de España?</p>
+            <p class="response show">Hola, la capital de España es Madrid.<br>¿Te puedo ayudar en otra cosa más?</p> -->  
+        </div> 
+
+    </div>
+
+    <audio id="audio" controls="none" style="display: none;">
+        <source id="wav" src="" type="audio/wav"></source>
+    </audio>
+
+
+    <!-- JS Main App -->
+    <!-- <script src="../node_modules/face-api.js/dist/face-api.min.js"></script> -->
+    <!-- <script src="./js/face_api.js?id=1"></script> -->
+    <script src="../node_modules/socket.io-client/dist/socket.io.js"></script>
+    <script src="./js/main.js?id=1"></script>
+    <script src="./js/audio_recorder2.js?id=1"></script>
+</body>
+</html>
