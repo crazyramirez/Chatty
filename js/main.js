@@ -124,7 +124,7 @@ async function tapRobot() {
             // detectInterval = setInterval(() => {
             //     detectFace();
             // }, 1000);
-        }, 1000);
+        }, 1200);
     }, 100);
 }
 
