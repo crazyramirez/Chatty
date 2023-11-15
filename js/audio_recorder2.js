@@ -131,7 +131,7 @@ function doWhateverWithAudio(audioBlob) {
     // Create a Blob from audioBlob if it's not already in the correct format
     const blob = audioBlob instanceof Blob ? audioBlob : new Blob([audioBlob], { type: 'audio/mpeg' });
     const formData = new FormData();
-    formData.append('audio', blob, 'recording.mp3');
+    formData.append('audio', blob, 'recording.wav');
     formData.append("clientId", localStorage.getItem("clientId"));
 
     fetch('/upload-audio', {
@@ -150,7 +150,7 @@ function doWhateverWithAudio(audioBlob) {
             console.log('Audio enviado exitosamente al servidor.');
             // var audio = document.getElementById('audio');
             // audio.volume = 1;
-            // var audioSrc = "../public/recordings/" + localStorage.getItem("clientId") + "_recording.mp3?timestamp=" + new Date().getTime();
+            // var audioSrc = "../public/recordings/" + localStorage.getItem("clientId") + "_recording.wav?timestamp=" + new Date().getTime();
             // audio.src = audioSrc;
             // audio.play();
             // console.log(data.transcription); // Acceder a la transcripción desde la respuesta JSON

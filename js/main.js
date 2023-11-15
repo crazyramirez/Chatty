@@ -71,7 +71,7 @@ function init() {
 function enableSpeech() {  
     var audio = document.getElementById('audio');
     audio.volume = 1;
-    var audioSrc = "../public/audio/ding.mp3"; // Agrega un parámetro de tiempo único
+    var audioSrc = "../public/audio/ding.wav"; // Agrega un parámetro de tiempo único
     audio.src = audioSrc;
     audio.play();
     document.getElementById("loadingDiv").style.display = "none";
@@ -105,7 +105,7 @@ async function tapRobot() {
         robotAnim("idle", 1, 500); 
         var audio = document.getElementById('audio');
         audio.volume = 1;
-        var audioSrc = "../public/audio/start.mp3"; // Agrega un parámetro de tiempo único
+        var audioSrc = "../public/audio/start.wav"; // Agrega un parámetro de tiempo único
         audio.src = audioSrc;
         audio.play(); 
     }, 100);
@@ -157,7 +157,7 @@ function robotSpeech(textMsg) {
 
         var audio = document.getElementById('audio');
         audio.volume = 1;
-        var audioSrc = "../public/recordings/" + localStorage.getItem("clientId") + "_response.mp3?timestamp=" + new Date().getTime(); // Agrega un parámetro de tiempo único
+        var audioSrc = "../public/recordings/" + localStorage.getItem("clientId") + "_response.wav?timestamp=" + new Date().getTime(); // Agrega un parámetro de tiempo único
         audio.src = audioSrc;
         audio.play(); 
 
