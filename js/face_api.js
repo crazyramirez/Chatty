@@ -92,7 +92,7 @@ async function detectFace() {
             if (lastExpression !== 'Happy') {
                 clearTimeout(surpriseTimer);
                 surpriseTimer = setTimeout(() => {
-                    listening();
+                    tapRobot();
                     clearInterval(detectInterval)
                 }, 2000);
             }
