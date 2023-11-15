@@ -41,7 +41,7 @@ html, body {
     left: 50%;
     height: 50px;
     transform: translate(-50%, -50%);
-    margin-top: 40px;
+    margin-top: 60px;
     letter-spacing: 0.3rem;
     /* animation: animText  6s ease infinite alternate; */
 }
