@@ -163,6 +163,7 @@ html, body {
     top: 100px;
     width: 100%;
     height: auto;
+    min-height: 60%;
     background-color: #f0f0f062;
     padding: 10px;
     padding-top: 15px;
