@@ -1,12 +1,11 @@
+// Global Variables
 VOICE_MIN_DECIBELS      = -40;
 DELAY_BETWEEN_DIALOGS   = 1000;
 DIALOG_MAX_LENGTH       = 60*1000;
 MEDIA_RECORDER          = null;
 IS_RECORDING            = false;
 
-//API to handle audio recording
 document.addEventListener("DOMContentLoaded", init);
-
 function init() {  
     navigator.mediaDevices.getUserMedia({ audio: true })
     .then(stream => {
@@ -16,17 +15,15 @@ function init() {
     });
 }
 
-//startRecording:
-function startRecording(){
-  
-
+// Start Recording
+function startRecording() {
     document.getElementById("mic-icon").classList.add("show");
     IS_RECORDING = true;
     record();
     console.log("Start Recording");
 }
 
-//stopRecording:
+// Stop Recording
 function stopRecording(){
     document.getElementById("mic-icon").classList.remove("show");
     IS_RECORDING = false;
@@ -36,7 +33,7 @@ function stopRecording(){
     console.log("Stop Recording");
 }
 
-//record:
+// Record
 function record(){
 
     navigator.mediaDevices.getUserMedia({ audio: true })
@@ -113,19 +110,15 @@ function record(){
             // stream = null;
             IS_RECORDING = false;
 
-            // if(!anySoundDetected) return;
-            //send to server:
             const audioBlob = new Blob(audioChunks, {'type': 'audio/mpeg'});
-            doWhateverWithAudio(audioBlob);
-            // MEDIA_RECORDER = null;
+            uploadAudioToServer(audioBlob);
         });
 
     });
 }
 
-
-function doWhateverWithAudio(audioBlob) {
-    // return;
+// Upload Recorded Audio to Server
+function uploadAudioToServer(audioBlob) {
     console.log("Send Recording to Server");
 
     // Create a Blob from audioBlob if it's not already in the correct format
@@ -148,20 +141,8 @@ function doWhateverWithAudio(audioBlob) {
         })
         .then(data => {
             console.log('Audio enviado exitosamente al servidor.');
-            // var audio = document.getElementById('audio');
-            // audio.volume = 1;
-            // var audioSrc = "../public/recordings/" + localStorage.getItem("clientId") + "_recording.wav?timestamp=" + new Date().getTime();
-            // audio.src = audioSrc;
-            // audio.play();
-            // console.log(data.transcription); // Acceder a la transcripción desde la respuesta JSON
         })
         .catch(error => {
             console.error('Error en la solicitud fetch:', error);
         });
-
-    // const audio = document.createElement("audio");
-    // audio.src = window.URL.createObjectURL(blob);
-    // document.body.appendChild(audio); // Use document.body to append to the body element
-    // audio.load();
-    // audio.play();
 }

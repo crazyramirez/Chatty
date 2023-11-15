@@ -1,12 +1,14 @@
 document.addEventListener("DOMContentLoaded", init);
 
+// Global Variables
 let robotImg = document.getElementById("robot-img");
 var messageContainer = document.getElementById('message-container');
-let interval;
-let video;
-let cameraStream = null;
+let robotAnimInterval;
 let lastExpression = null;
 let detectInterval;
+var audio = document.getElementById('audio');
+// let cameraStream = null;
+// let video = document.getElementById("video");
 
 // Generate UniqueID
 function generateUniqueId() {
@@ -29,8 +31,7 @@ function getOrCreateClientId() {
 }
 
 const uniqueId = getOrCreateClientId();
-
-// SOCKET IO FOR PRODUCTION !!!!
+// SOCKET IO
 var socket = io({
     // transports: ['polling'],
     // transports: ['websocket'],
@@ -56,20 +57,19 @@ socket.on('disconnect', function(args) {
 });
 
 
+// Init APP
 function init() {  
     // setupCamera();
     robotAnim("idle", 1, 500);
     setTimeout(() => {
         document.getElementById("loadingText").innerText = "TAP TO ENTER";
-        document.getElementById("loadingDiv").onclick = enableSpeech;
+        document.getElementById("loadingDiv").onclick = enableAudio;
     }, 1000);
-
     robotImg.onclick = tapRobot; 
 }
 
-
-function enableSpeech() {  
-    var audio = document.getElementById('audio');
+// Enable Audio
+function enableAudio() {  
     audio.volume = 1;
     var audioSrc = "../public/audio/ding.mp3"; // Agrega un parámetro de tiempo único
     audio.src = audioSrc;
@@ -77,10 +77,8 @@ function enableSpeech() {
     document.getElementById("loadingDiv").style.display = "none";
 }
 
-let lastSalute = 1;
 async function tapRobot() {  
-    var audio = document.getElementById('audio');
-
+    
     if (!audio.paused)
     {
         audio.pause();
@@ -99,14 +97,12 @@ async function tapRobot() {
 
     setTimeout(() => {
         robotAnim("idle", 1, 500); 
-        var audio = document.getElementById('audio');
         audio.volume = 1;
         var audioSrc = "../public/audio/start.mp3"; // Agrega un parámetro de tiempo único
         audio.src = audioSrc;
         audio.play(); 
 
         setTimeout(() => {
-            robotAnim("talk", 2, 100);
             let salute;
             if (rndInt1 === 1)
             {
@@ -119,7 +115,7 @@ async function tapRobot() {
                 salute = "Cuéntame";
             }
             robotSpeech(salute);
-        }, 300);
+        }, 100);
 
         setTimeout(() => {
             document.getElementById("mic-icon").style.visibility = "visible";
@@ -139,8 +135,8 @@ function robotAnim(type, subtype, time) {
     "./public/images/robot_" + type + "_" + subtype + "_2.webp",
     ];
 
-    clearInterval(interval);
-    interval = setInterval(() => {
+    clearInterval(robotAnimInterval);
+    robotAnimInterval = setInterval(() => {
         robotImg.src = images[currentImageIndex];
         currentImageIndex++;
         if (currentImageIndex >= images.length) {
@@ -164,19 +160,6 @@ function robotSpeech(textMsg) {
     .then(response => response.json())
     .then(data => {
         // Manejar la respuesta del servidor
-
-        robotAnim("talk", 2, 100);
-
-        var audio = document.getElementById('audio');
-        audio.volume = 1;
-        var audioSrc = "../public/recordings/" + localStorage.getItem("clientId") + "_response.wav?timestamp=" + new Date().getTime(); // Agrega un parámetro de tiempo único
-        audio.src = audioSrc;
-        audio.play(); 
-
-        document.getElementById("audio").addEventListener("ended", function () {  
-            robotAnim("idle", 1, 500);
-        }, false);
-
     })
     .catch(error => {
         console.error('Error:', error);
@@ -202,7 +185,7 @@ function convertirATextoPlano(texto) {
 
 socket.on('text-received', function(args) {
     console.log(args.text);
-    let plainText = convertirATextoPlano(args.text.content)
+    let plainText = convertirATextoPlano(args.text.content);
     robotSpeech(plainText);
     createParagraph(plainText, "response")
 });
@@ -211,4 +194,15 @@ socket.on('text-send', function(args) {
     console.log(args.text);
     let plainText = convertirATextoPlano(args.text)
     createParagraph(plainText, "message")
+});
+
+socket.on('play-audio', function() {
+    audio.volume = 1;
+    var audioSrc = "../public/recordings/" + localStorage.getItem("clientId") + "_response.wav?timestamp=" + new Date().getTime(); // Agrega un parámetro de tiempo único
+    audio.src = audioSrc;
+    audio.play(); 
+    robotAnim("talk", 2, 100);
+    document.getElementById("audio").addEventListener("ended", function () {  
+        robotAnim("idle", 1, 500);
+    }, false);
 });
