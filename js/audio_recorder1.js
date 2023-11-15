@@ -110,7 +110,7 @@ function record(){
             // stream = null;
             IS_RECORDING = false;
 
-            const audioBlob = new Blob(audioChunks, {'type': 'audio/wav'});
+            const audioBlob = new Blob(audioChunks, {'type': 'audio/mpeg'});
             uploadAudioToServer(audioBlob);
         });
 
@@ -122,9 +122,9 @@ function uploadAudioToServer(audioBlob) {
     console.log("Send Recording to Server");
 
     // Create a Blob from audioBlob if it's not already in the correct format
-    const blob = audioBlob instanceof Blob ? audioBlob : new Blob([audioBlob], { type: 'audio/wav' });
+    const blob = audioBlob instanceof Blob ? audioBlob : new Blob([audioBlob], { type: 'audio/mpeg' });
     const formData = new FormData();
-    formData.append('audio', blob, 'recording.wav');
+    formData.append('audio', blob, 'recording.mp3');
     formData.append("clientId", localStorage.getItem("clientId"));
 
     fetch('/upload-audio', {

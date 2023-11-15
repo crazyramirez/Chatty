@@ -83,7 +83,7 @@ const openai= new OpenAI({
 app.post('/speech', function(req, res) {
     const textToSave = req.body.textMsg;
     const clientId = req.body.clientId;
-    var filepath = path.join(__dirname, "/public/recordings/" + clientId + '_response.wav');
+    var filepath = path.join(__dirname, "/public/recordings/" + clientId + '_response.mp3');
     console.log("textToSave: " + textToSave);
     gtts.save(filepath, textToSave, function () {
         console.log("Saved");
@@ -98,11 +98,11 @@ const upload = multer({ storage: storage });
 // POST Upload Audio File
 app.post('/upload-audio', upload.single('audio'), async (req, res) => {
     const clientId = req.body.clientId;
-    fs.writeFileSync("public/recordings/" + clientId + '_recording.wav', req.file.buffer);
+    fs.writeFileSync("public/recordings/" + clientId + '_recording.mp3', req.file.buffer);
     try {
         // OpenAI Audio Transcription
         const transcription = await openai.audio.transcriptions.create({
-            file: fs.createReadStream("public/recordings/" + clientId + '_recording.wav'),
+            file: fs.createReadStream("public/recordings/" + clientId + '_recording.mp3'),
             model: "whisper-1",
             language: "es"
         });
