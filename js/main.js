@@ -193,7 +193,7 @@ socket.on('text-send', function(args) {
 
 socket.on('play-audio', function() {
     audio.volume = 1;
-    var audioSrc = "../public/recordings/" + localStorage.getItem("clientId") + "_response.mp3?timestamp=" + new Date().getTime(); // Agrega un parámetro de tiempo único
+    var audioSrc = "../public/recordings/" + localStorage.getItem("clientId") + "_response.wav?timestamp=" + new Date().getTime(); // Agrega un parámetro de tiempo único
     audio.src = audioSrc;
     audio.play(); 
     robotAnim("talk", 2, 100);
