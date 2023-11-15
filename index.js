@@ -86,7 +86,7 @@ io.on("connection", (socket) => {
 
 // OpenAI
 const openai= new OpenAI({
-    apiKey:"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"
+    apiKey: process.env.OPENAI_API
 }) 
 
 // Speech
