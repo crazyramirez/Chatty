@@ -74,10 +74,10 @@ function record(){
             currentTime = time.getTime();
             
             //time out:
-            if(currentTime > startTime + DIALOG_MAX_LENGTH){
-                MEDIA_RECORDER.stop();
-                return;
-            }
+            // if(currentTime > startTime + DIALOG_MAX_LENGTH){
+            //     MEDIA_RECORDER.stop();
+            //     return;
+            // }
 
             //a dialog detected:
             if( anySoundDetected === true &&
