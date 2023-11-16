@@ -46,6 +46,8 @@
         <meta name="theme-color" media="(prefers-color-scheme: light)" content="white">
         <meta name="theme-color" content="#202020">
 
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
         <!-- Main StyleSheet -->
         <link rel="stylesheet" href="./css/main.css?id=12">
         <!-- Bootstrap 5.0.2 -->
@@ -69,7 +71,12 @@
             <div class="robot-container">
                 <img class="robot-img" id="robot-img" src="./public/images/robot_idle_1_1.webp" id="robot-img"/>
                 <img src="./public/images/mic_icon.webp" alt="" id="mic-icon" class="mic-icon" style="visibility: visible;">
+                <div class="date-time">
+                    <i class="fa-solid fa-calendar-days" style="margin-right: 5px;"></i><p id="date"></i>16/11/2023</p>
+                    <i class="fa-solid fa-clock" style="margin-right: 5px;"></i><p id="time"></i>21:35</p>
+                </div>
             </div>
+
             <div class="message-container" id="message-container" style="display: flex;">
                 <p class="response show">Hola, ¿En qué te puedo ayudar?</p>
                 <!-- <p class="message show">¿Cual es la capital de España?</p>
@@ -90,7 +97,7 @@
         </div>
 
         <audio id="audio" controls="none" style="display: none;">
-            <source id=".wav" src="" type="audio/.wav"></source>
+            <source id="mp3" src="" type="audio/mpeg"></source>
             <source id="wav" src="" type="audio/wav"></source>
         </audio>
 

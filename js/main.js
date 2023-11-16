@@ -56,6 +56,22 @@ socket.on('disconnect', function(args) {
     socket.emit("disconnectClient", localStorage.getItem("id", args.id));
 });
 
+// Get Date Time
+function formatDate(date) {
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    const formattedDate = `${day}/${month}/${year}`;
+    return formattedDate;
+}
+
+function formatTime(date) {
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const seconds = date.getSeconds().toString().padStart(2, '0');
+    const formattedTime = `${hours}:${minutes}:${seconds}`;
+    return formattedTime;
+}
 
 // Init APP
 function init() {  
@@ -66,6 +82,12 @@ function init() {
         document.getElementById("loadingDiv").onclick = enableAudio;
     }, 1000);
     robotImg.onclick = tapRobot; 
+
+    setInterval(() => {
+        const currentDate = new Date();
+        document.getElementById("date").innerText = formatDate(currentDate);
+        document.getElementById("time").innerText = formatTime(currentDate);
+    }, 1000);
 }
 
 // Enable Audio

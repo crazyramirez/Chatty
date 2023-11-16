@@ -3,6 +3,26 @@
     src: url("../public/fonts/zerohour.otf");
 }
 
+@font-face {
+    font-family: robotoRegular;
+    src: url("../public/fonts/Roboto-Regular.ttf");
+}
+
+@font-face {
+    font-family: robotoMedium;
+    src: url("../public/fonts/Roboto-Medium.ttf");
+}
+
+@font-face {
+    font-family: robotoLight;
+    src: url("../public/fonts/Roboto-Light.ttf");
+}
+
+@font-face {
+    font-family: robotoBold;
+    src: url("../public/fonts/Roboto-Bold.ttf");
+}
+
 /* HTML -- Body */
 html, body {
     touch-action: pan-y;
@@ -117,21 +137,23 @@ html, body {
 
 .robot-container {
     position: relative;
-    width: 100%;
+    /* width: 100%; */
     height: 100%;
     /* max-height: 40%; */
-    /* min-height: 50%; */
+    /* min-height: 25%; */
     border-radius: 5px;
     background-color: transparent; 
     overflow: hidden;
-    flex-grow: 1; 
+    /* flex-grow: 1;  */
+    display: flex;
+    flex-direction: column;
+    /* gap: 10px; */
 }
 
 .robot-img {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    margin-left: 50%;
+    /* top: 50%; */
+    transform: translate(-50%);
     width: 100%;
     height: 100%;
     user-select: none;
@@ -163,7 +185,7 @@ html, body {
     top: 100px;
     width: 100%;
     height: auto;
-    min-height: 60%;
+    min-height: 40%;
     background-color: #f0f0f062;
     padding: 10px;
     padding-top: 15px;
@@ -186,6 +208,7 @@ html, body {
     pointer-events: none;
     transition: all 1s ease;
     opacity: 0;
+    font-family: robotoLight;
 }
 
 .response {
@@ -199,6 +222,7 @@ html, body {
     pointer-events: none;
     transition: all 1s ease;
     opacity: 0;
+    font-family: robotoLight;
 }
 
 .show {
@@ -207,7 +231,6 @@ html, body {
 
 .title {
     position: relative;
-    border-radius: 5px;
     width: 100%;
     border-radius: 5px;
     overflow-y: hidden;
@@ -217,7 +240,6 @@ html, body {
     text-transform: uppercase;
     text-align: center;
     font-size: 1.5rem;
-    min-height: 60px;
     font-family: robotFont;
     display: none;
 }
@@ -235,6 +257,33 @@ html, body {
     object-fit: cover;
 }
 
+/* Date Time */
+.date-time {
+    background-color: #f0f0f062;
+    padding: 15px;
+    border-radius: 5px;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    font-family: robotoMedium;
+    color: #021f36;
+    font-size: 1rem;
+    align-items: baseline;
+}
+
+#date {
+    text-align: left;
+    margin-bottom: 2px;
+    flex-grow: 2;
+}
+
+#time {
+    text-align: right;
+    margin-bottom: 2px;
+}
+
+
 @media only screen and (max-width: 600px) {
     .main-container {
         width: 100vw;
@@ -245,9 +294,7 @@ html, body {
 
     .title {
         flex-grow: 1;
-        margin-bottom: 10px;
-        margin-top: 5px;
-        padding: 10px;
+        margin-top: 10px;
         display: block;
     }
 
@@ -256,8 +303,7 @@ html, body {
     }
 
     .robot-img {
-        width: 100%;
-        height: 100%;
+        width: 90%;
     }
 
     .main-container {
