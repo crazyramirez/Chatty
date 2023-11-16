@@ -10,6 +10,7 @@ var audio = document.getElementById('audio');
 // let cameraStream = null;
 // let video = document.getElementById("video");
 
+
 // Generate UniqueID
 function generateUniqueId() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -29,9 +30,9 @@ function getOrCreateClientId() {
     }
     return clientId;
 }
-
 const uniqueId = getOrCreateClientId();
-// SOCKET IO
+
+// Socket.io 
 var socket = io({
     // transports: ['polling'],
     // transports: ['websocket'],
@@ -45,7 +46,7 @@ var socket = io({
     }
 });
 
-// Socket.io onConnected emit from index.ts
+// Socket.io Received
 socket.on('onConnected', function(args) {
     console.log("SocketID Connected: " + args.id);
     localStorage.setItem("id", args.id);
@@ -56,7 +57,31 @@ socket.on('disconnect', function(args) {
     socket.emit("disconnectClient", localStorage.getItem("id", args.id));
 });
 
-// Get Date Time
+socket.on('text-received', function(args) {
+    console.log(args.text);
+    let plainText = convertirATextoPlano(args.text.content);
+    robotSpeech(plainText);
+    createParagraph(plainText, "response")
+});
+
+socket.on('text-send', function(args) {
+    console.log(args.text);
+    let plainText = convertirATextoPlano(args.text)
+    createParagraph(plainText, "message")
+});
+
+socket.on('play-audio', function() {
+    audio.volume = 1;
+    var audioSrc = "../public/recordings/" + localStorage.getItem("clientId") + "_response.wav?timestamp=" + new Date().getTime(); // Agrega un parámetro de tiempo único
+    audio.src = audioSrc;
+    audio.play(); 
+    robotAnim("talk", 2, 100);
+    document.getElementById("audio").addEventListener("ended", function () {  
+        robotAnim("idle", 1, 500);
+    }, false);
+});
+
+// Format Date
 function formatDate(date) {
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -65,6 +90,7 @@ function formatDate(date) {
     return formattedDate;
 }
 
+// Format Time
 function formatTime(date) {
     const hours = date.getHours().toString().padStart(2, '0');
     const minutes = date.getMinutes().toString().padStart(2, '0');
@@ -99,8 +125,8 @@ function enableAudio() {
     document.getElementById("loadingDiv").style.display = "none";
 }
 
+// Tap Robot
 async function tapRobot() {  
-    
     if (!audio.paused)
     {
         audio.pause();
@@ -176,7 +202,7 @@ function robotSpeech(textMsg) {
     })
     .then(response => response.json())
     .then(data => {
-        // Manejar la respuesta del servidor
+        // Get DATA from Server
     })
     .catch(error => {
         console.error('Error:', error);
@@ -199,27 +225,3 @@ function convertirATextoPlano(texto) {
     // return texto.toString().replace(/[\n\r]+/g, ' ').replace(/<[^>]*>?/gm, '');
     return texto.replace(/<[^>]*>?/gm, '');
 }
-
-socket.on('text-received', function(args) {
-    console.log(args.text);
-    let plainText = convertirATextoPlano(args.text.content);
-    robotSpeech(plainText);
-    createParagraph(plainText, "response")
-});
-
-socket.on('text-send', function(args) {
-    console.log(args.text);
-    let plainText = convertirATextoPlano(args.text)
-    createParagraph(plainText, "message")
-});
-
-socket.on('play-audio', function() {
-    audio.volume = 1;
-    var audioSrc = "../public/recordings/" + localStorage.getItem("clientId") + "_response.wav?timestamp=" + new Date().getTime(); // Agrega un parámetro de tiempo único
-    audio.src = audioSrc;
-    audio.play(); 
-    robotAnim("talk", 2, 100);
-    document.getElementById("audio").addEventListener("ended", function () {  
-        robotAnim("idle", 1, 500);
-    }, false);
-});

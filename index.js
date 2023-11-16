@@ -65,9 +65,7 @@ io.on("connection", (socket) => {
     const clientId = socket.handshake.query.clientId;
     console.log('Un cliente se ha conectado con el ID: ' + clientId);
     socket.join(clientId)
-    console.log("Socket Connected: " + clientId);
     socket.emit("onConnected", { id: clientId });
-    // socket.join(clientId);   
     socket.on('disconnect', () => {
         console.log('disconnectClient: ' + clientId);
         socket.leave(clientId);
@@ -109,12 +107,30 @@ app.post('/upload-audio', upload.single('audio'), async (req, res) => {
         console.log(transcription.text);
         io.to(clientId).emit("text-send", {text: transcription.text});
 
+        // Delete recorded File
+        fs.unlink("public/recordings/" + clientId + '_recording.wav', (err) => {
+            if (err) {
+                console.error('Error al eliminar el archivo:', err);
+            } else {
+                console.log('Archivo eliminado con éxito');
+            }
+        });
+
         // OpenAI Chat Generation
+        // const chatCompletion = await openai.chat.completions.create({
+        //     model: "gpt-3.5-turbo",
+        //     messages: [{"role": "user", "content": transcription.text}],
+        // });
+        // console.log(chatCompletion.choices[0].message);  
+
         const chatCompletion = await openai.chat.completions.create({
             model: "gpt-3.5-turbo",
             messages: [{"role": "user", "content": transcription.text}],
+            max_tokens: 100,
+            n: 1,
+            stop: null,
+            temperature: 1,
         });
-        console.log(chatCompletion.choices[0].message);  
         
         // OpenAI Chat Generation Received Text
         io.to(clientId).emit("text-received", {text: chatCompletion.choices[0].message});
