@@ -127,7 +127,13 @@ function record(){
 
 
 // Upload Recorded Audio to Server
+let sendEnabled = true;
 async function uploadAudioToServer(audioBlob) {
+
+    if (!sendEnabled) {
+        console.log('SEND Disabled.');
+        return;
+    }
 
     console.log("Recording Duration: " + RECORDING_TIME + " seconds");
     if (RECORDING_TIME < 2) 
@@ -147,7 +153,7 @@ async function uploadAudioToServer(audioBlob) {
     })
         .then(response => {
             if (response.ok) {
-                return response.json(); // Parsear la respuesta como JSON
+                return response.json();
             } else {
                 console.error('Error al enviar el audio al servidor.');
                 throw new Error('Error al enviar el audio al servidor.');
@@ -159,4 +165,10 @@ async function uploadAudioToServer(audioBlob) {
         .catch(error => {
             console.error('Error en la solicitud fetch:', error);
         });
+
+    sendEnabled = false;
+    setTimeout(() => {
+        sendEnabled = true;
+        console.log('SEND Enabled');
+    }, 5000);
 }
