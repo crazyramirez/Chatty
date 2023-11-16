@@ -4,6 +4,8 @@ DELAY_BETWEEN_DIALOGS   = 1000;
 DIALOG_MAX_LENGTH       = 60*1000;
 MEDIA_RECORDER          = null;
 IS_RECORDING            = false;
+let RECORDING_TIME = 0;
+let RECORDING_INTERVAL;
 
 document.addEventListener("DOMContentLoaded", init);
 function init() {  
@@ -35,6 +37,10 @@ function stopRecording(){
 
 // Record
 function record(){
+
+    RECORDING_INTERVAL = setInterval(() => {
+        RECORDING_TIME++;
+    }, 1000);
 
     navigator.mediaDevices.getUserMedia({ audio: true })
     .then(stream => {
@@ -108,17 +114,25 @@ function record(){
             document.getElementById("mic-icon").classList.remove("show");
             stream.getTracks().forEach(track => track.stop());
             // stream = null;
-            IS_RECORDING = false;
-
             const audioBlob = new Blob(audioChunks, {'type': 'audio/wav'});
             uploadAudioToServer(audioBlob);
+
+            IS_RECORDING = false;
+            RECORDING_TIME = 0;
+            clearInterval(RECORDING_INTERVAL);
         });
 
     });
 }
 
+
 // Upload Recorded Audio to Server
-function uploadAudioToServer(audioBlob) {
+async function uploadAudioToServer(audioBlob) {
+
+    console.log("Recording Duration: " + RECORDING_TIME + " seconds");
+    if (RECORDING_TIME < 2) 
+        return;
+
     console.log("Send Recording to Server");
 
     // Create a Blob from audioBlob if it's not already in the correct format

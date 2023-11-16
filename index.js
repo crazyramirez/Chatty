@@ -82,9 +82,9 @@ app.post('/speech', function(req, res) {
     const textToSave = req.body.textMsg;
     const clientId = req.body.clientId;
     var filepath = path.join(__dirname, "/public/recordings/" + clientId + '_response.wav');
-    console.log("textToSave: " + textToSave);
+    console.log("Speech TEXT: " + textToSave);
     gtts.save(filepath, textToSave, function () {
-        console.log("Saved");
+        console.log("Speech SAVED");
         io.to(clientId).emit("play-audio");
     });
 });
@@ -104,8 +104,10 @@ app.post('/upload-audio', upload.single('audio'), async (req, res) => {
             model: "whisper-1",
             language: "es"
         });
-        console.log(transcription.text);
-        io.to(clientId).emit("text-send", {text: transcription.text});
+        console.log("Transcription: " + transcription.text);
+
+        if (transcription.text.includes("Amara.org") || transcription.text.includes("Subtítulos realizados"))
+            return;
 
         // Delete recorded File
         fs.unlink("public/recordings/" + clientId + '_recording.wav', (err) => {
@@ -120,23 +122,53 @@ app.post('/upload-audio', upload.single('audio'), async (req, res) => {
         // const chatCompletion = await openai.chat.completions.create({
         //     model: "gpt-3.5-turbo",
         //     messages: [{"role": "user", "content": transcription.text}],
+        //     max_tokens: 100,
+        //     n: 1,
+        //     stop: null,
+        //     temperature: 1,
         // });
-        // console.log(chatCompletion.choices[0].message);  
 
-        const chatCompletion = await openai.chat.completions.create({
-            model: "gpt-3.5-turbo",
-            messages: [{"role": "user", "content": transcription.text}],
-            max_tokens: 100,
-            n: 1,
-            stop: null,
-            temperature: 1,
-        });
-        
+        io.to(clientId).emit("text-send", {text: transcription.text});
+
+        await sendMessageToOpenAI(clientId, transcription.text);
         // OpenAI Chat Generation Received Text
-        io.to(clientId).emit("text-received", {text: chatCompletion.choices[0].message});
 
     } catch (error) {
         console.error('Error al procesar la transcripción:', error);
         res.status(500).json({ error: 'Error al procesar la transcripción' });
     }
 });
+
+const messageHistories = {};
+// Función para enviar un mensaje a OpenAI
+async function sendMessageToOpenAI(clientId, message) {
+    try {
+        // Obtiene el historial de mensajes del cliente o inicializa uno si es nuevo
+        const messageHistory = messageHistories[clientId] || [];
+        
+        // Agrega el nuevo mensaje al historial
+        messageHistory.push({ role: 'user', content: message });
+
+        // Realiza una consulta a OpenAI con el historial completo
+        const response = await openai.chat.completions.create({
+            model: 'gpt-3.5-turbo',
+            messages: messageHistory,
+            max_tokens: 100,
+        });
+
+        // Agrega la respuesta de OpenAI al historial
+        messageHistory.push({ role: 'assistant', content: response.choices[0].message.content });
+
+        // Actualiza el historial del cliente
+        messageHistories[clientId] = messageHistory;
+
+        console.log("Response: " + response.choices[0].message.content);
+
+        // Socket Emit
+        io.to(clientId).emit("text-received", {text: response.choices[0].message.content});
+
+    } catch (error) {
+        console.error('Error al enviar mensaje a OpenAI:', error);
+        return 'Ocurrió un error al procesar la solicitud';
+    }
+}

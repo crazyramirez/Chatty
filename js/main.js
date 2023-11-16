@@ -59,15 +59,13 @@ socket.on('disconnect', function(args) {
 
 socket.on('text-received', function(args) {
     console.log(args.text);
-    let plainText = convertirATextoPlano(args.text.content);
-    robotSpeech(plainText);
-    createParagraph(plainText, "response")
+    robotSpeech(args.text);
+    createParagraph(args.text, "response")
 });
 
 socket.on('text-send', function(args) {
     console.log(args.text);
-    let plainText = convertirATextoPlano(args.text)
-    createParagraph(plainText, "message")
+    createParagraph(args.text, "message")
 });
 
 socket.on('play-audio', function() {
@@ -126,7 +124,9 @@ function enableAudio() {
 }
 
 // Tap Robot
+let tapEnanbled = true;
 async function tapRobot() {  
+
     if (!audio.paused)
     {
         audio.pause();
@@ -141,24 +141,27 @@ async function tapRobot() {
         return;
     }
 
+    if (!tapEnanbled) {
+        console.log('TAP Robot Disabled.');
+        return;
+    }
+
     let rndInt1 = Math.floor(Math.random() * 4) + 1;
 
+    robotAnim("idle", 1, 500); 
     setTimeout(() => {
-        robotAnim("idle", 1, 500); 
-        setTimeout(() => {
-            let salute;
-            if (rndInt1 === 1)
-            {
-                salute = "Te escucho";
-            } else if (rndInt1 ===  2) {
-                salute = "Dime";
-            } else if (rndInt1 ===  3) {
-                salute = "Sí?";
-            } else if (rndInt1 ===  4) {
-                salute = "Cuéntame";
-            }
-            robotSpeech(salute);
-        }, 100);
+        let salute;
+        if (rndInt1 === 1)
+        {
+            salute = "Te escucho";
+        } else if (rndInt1 ===  2) {
+            salute = "Dime";
+        } else if (rndInt1 ===  3) {
+            salute = "¿Sí?";
+        } else if (rndInt1 ===  4) {
+            salute = "Cuéntame";
+        }
+        robotSpeech(salute);
 
         setTimeout(() => {
             document.getElementById("mic-icon").style.visibility = "visible";
@@ -169,6 +172,12 @@ async function tapRobot() {
             // }, 1000);
         }, 1200);
     }, 100);
+
+    tapEnanbled = false;
+    setTimeout(() => {
+        tapEnanbled = true;
+        console.log('TAP Robot Enabled');
+    }, 3000);
 }
 
 function robotAnim(type, subtype, time) {
@@ -219,9 +228,4 @@ function createParagraph(textMsg, type) {
         newParagraph.classList.add('show');
         messageContainer.scrollTo({ top: newParagraph.offsetTop, behavior: 'smooth' });
     }, 100);
-}
-
-function convertirATextoPlano(texto) {
-    // return texto.toString().replace(/[\n\r]+/g, ' ').replace(/<[^>]*>?/gm, '');
-    return texto.replace(/<[^>]*>?/gm, '');
 }
