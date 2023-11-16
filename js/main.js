@@ -131,6 +131,7 @@ async function tapRobot() {
     {
         audio.pause();
         audio.currentTime = 0;
+        audio.src = null;
         robotAnim("idle", 1, 500);
         return;
     }
