@@ -148,6 +148,7 @@ async function tapRobot() {
         audio.currentTime = 0;
         console.log("Stopping Audio");
         animRobotImg();
+        document.getElementById("loader-2").style.display = "none";
         return;
     }
 
@@ -159,6 +160,7 @@ async function tapRobot() {
             audio.play(); 
         }, 100);
         animRobotImg();
+        document.getElementById("loader-2").style.display = "none";
         return;
     }
 
@@ -166,7 +168,8 @@ async function tapRobot() {
         console.log('TAP Robot Disabled.');
         return;
     }
-
+    
+    document.getElementById("loader-2").style.display = "none";
     animRobotImg();
 
     setTimeout(() => {
