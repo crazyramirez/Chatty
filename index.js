@@ -119,18 +119,7 @@ app.post('/upload-audio', upload.single('audio'), async (req, res) => {
             }
         });
 
-        // OpenAI Chat Generation
-        // const chatCompletion = await openai.chat.completions.create({
-        //     model: "gpt-3.5-turbo",
-        //     messages: [{"role": "user", "content": transcription.text}],
-        //     max_tokens: 100,
-        //     n: 1,
-        //     stop: null,
-        //     temperature: 1,
-        // });
-
         io.to(clientId).emit("text-send", {text: transcription.text});
-
         io.to(clientId).emit("gpt-thinking");
 
         await sendMessageToOpenAI(clientId, transcription.text);
@@ -149,8 +138,8 @@ async function sendMessageToOpenAI(clientId, message) {
         // Obtiene el historial de mensajes del cliente o inicializa uno si es nuevo
         const messageHistory = messageHistories[clientId] || [];
 
-        if (messageHistory.length >= 4) {
-            messageHistory.shift(); // Elimina el mensaje más antiguo si ya hay 3 mensajes
+        if (messageHistory.length >= 5) {
+            messageHistory.shift();
         }
         
         // Agrega el nuevo mensaje al historial
