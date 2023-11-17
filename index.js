@@ -81,6 +81,7 @@ const openai= new OpenAI({
 app.post('/speech', function(req, res) {
     const textToSave = req.body.textMsg;
     const clientId = req.body.clientId;
+    io.to(clientId).emit("gpt-thinking");
     var filepath = path.join(__dirname, "/public/recordings/" + clientId + '_response.wav');
     console.log("Speech TEXT: " + textToSave);
     gtts.save(filepath, textToSave, function () {
@@ -129,6 +130,8 @@ app.post('/upload-audio', upload.single('audio'), async (req, res) => {
         // });
 
         io.to(clientId).emit("text-send", {text: transcription.text});
+
+        io.to(clientId).emit("gpt-thinking");
 
         await sendMessageToOpenAI(clientId, transcription.text);
         // OpenAI Chat Generation Received Text

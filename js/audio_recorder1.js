@@ -111,7 +111,9 @@ function record(){
         MEDIA_RECORDER.addEventListener('stop', () => {
             console.log("Stop Audio Recording");
             //stop all the tracks:
-            document.getElementById("mic-icon").classList.remove("show");
+            setTimeout(() => {
+                document.getElementById("mic-icon").classList.remove("show");
+            }, 300);
             stream.getTracks().forEach(track => track.stop());
             // stream = null;
             const audioBlob = new Blob(audioChunks, {'type': 'audio/wav'});

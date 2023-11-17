@@ -60,15 +60,21 @@ socket.on('disconnect', function(args) {
 socket.on('text-received', function(args) {
     console.log(args.text);
     robotSpeech(args.text);
-    createParagraph(args.text, "response")
+    createParagraph(args.text, "response");
 });
 
 socket.on('text-send', function(args) {
     console.log(args.text);
-    createParagraph(args.text, "message")
+    createParagraph(args.text, "message");
+});
+
+socket.on('gpt-thinking', function() {
+    document.getElementById("loader-2").style.display = "block";
+
 });
 
 socket.on('play-audio', function() {
+    document.getElementById("loader-2").style.display = "none";
     audio.volume = 1;
     var audioSrc = "../public/recordings/" + localStorage.getItem("clientId") + "_response.wav?timestamp=" + new Date().getTime(); // Agrega un parámetro de tiempo único
     audio.src = audioSrc;
@@ -117,29 +123,42 @@ function init() {
 // Enable Audio
 function enableAudio() {  
     audio.volume = 1;
-    var audioSrc = "../public/audio/ding.mp3"; // Agrega un parámetro de tiempo único
-    audio.src = audioSrc;
+    audio.src = "../public/audio/beep.wav";
     audio.play();
     document.getElementById("loadingDiv").style.display = "none";
+}
+
+function animRobotImg() {
+    document.getElementById("robot-img").style.transform = "translate(-50%) scale(0.95)";
+    document.getElementById("robot-img").style.opacity = "0.8";
+    setTimeout(() => {
+        document.getElementById("robot-img").style.transform = "translate(-50%) scale(1)";
+        document.getElementById("robot-img").style.opacity = "1";
+    }, 200);
 }
 
 // Tap Robot
 let tapEnanbled = true;
 async function tapRobot() {  
+    robotAnim("idle", 1, 500); 
 
     if (!audio.paused)
     {
         audio.pause();
         audio.currentTime = 0;
-        // audio.src = null;
-        robotAnim("idle", 1, 500);
         console.log("Stopping Audio");
+        animRobotImg();
         return;
     }
 
     if (MEDIA_RECORDER && IS_RECORDING)
     {
         MEDIA_RECORDER.stop();
+        setTimeout(() => {
+            audio.src = "../public/audio/beep2.wav";
+            audio.play(); 
+        }, 100);
+        animRobotImg();
         return;
     }
 
@@ -148,22 +167,25 @@ async function tapRobot() {
         return;
     }
 
-    let rndInt1 = Math.floor(Math.random() * 4) + 1;
+    animRobotImg();
 
-    robotAnim("idle", 1, 500); 
     setTimeout(() => {
-        let salute;
-        if (rndInt1 === 1)
-        {
-            salute = "Te escucho";
-        } else if (rndInt1 ===  2) {
-            salute = "Dime";
-        } else if (rndInt1 ===  3) {
-            salute = "¿Sí?";
-        } else if (rndInt1 ===  4) {
-            salute = "Cuéntame";
-        }
-        robotSpeech(salute);
+        let rndInt1 = Math.floor(Math.random() * 4) + 1;
+        // let salute;
+        // if (rndInt1 === 1)
+        // {
+        //     salute = "Te escucho";
+        // } else if (rndInt1 ===  2) {
+        //     salute = "Dime";
+        // } else if (rndInt1 ===  3) {
+        //     salute = "¿Sí?";
+        // } else if (rndInt1 ===  4) {
+        //     salute = "Cuéntame";
+        // }
+        // robotSpeech(salute);
+
+        audio.src = "../public/audio/beep.wav";
+        audio.play();
 
         setTimeout(() => {
             document.getElementById("mic-icon").style.visibility = "visible";
@@ -172,7 +194,7 @@ async function tapRobot() {
             // detectInterval = setInterval(() => {
             //     detectFace();
             // }, 1000);
-        }, 1200);
+        }, 300);
     }, 100);
 
     tapEnanbled = false;
@@ -182,14 +204,17 @@ async function tapRobot() {
     }, 3000);
 }
 
+let images;
 function robotAnim(type, subtype, time) {
+    clearInterval(robotAnimInterval);
+    
+    images = null;
     let currentImageIndex = 0;
-    let images = [
+    images = [
     "./public/images/robot_" + type + "_" + subtype + "_1.webp",
     "./public/images/robot_" + type + "_" + subtype + "_2.webp",
     ];
 
-    clearInterval(robotAnimInterval);
     robotAnimInterval = setInterval(() => {
         robotImg.src = images[currentImageIndex];
         currentImageIndex++;
@@ -221,6 +246,9 @@ function robotSpeech(textMsg) {
 }
 
 function createParagraph(textMsg, type) { 
+    if (textMsg.length == 0)
+    return;
+
     messageContainer.style.display = "flex";
     var newParagraph = document.createElement('p');
     newParagraph.className = type;

@@ -105,6 +105,10 @@ html, body {
     }
 }
 
+#loader-2 {
+    position: absolute;
+}
+
 ::-webkit-scrollbar {
     width: 4px;
 }
@@ -165,13 +169,13 @@ html, body {
 
 .mic-icon {
     position: absolute;
-    width: 140px;
-    height: 140px;
+    width: 200px;
+    height: 200px;
     left: 50%;
-    bottom: 0px;
+    bottom: 40px;
     transform: translate(-50%);
-    filter: drop-shadow(0 0 1rem crimson);
-    -webkit-filter: drop-shadow(0 0 1rem crimson);
+    filter: drop-shadow(0 0 0.7rem rgb(20, 113, 220));
+    -webkit-filter: drop-shadow(0 0 0.7rem rgb(20, 113, 220));
     transition: all 0.6s ease;
     opacity: 0;
     touch-action: none;
