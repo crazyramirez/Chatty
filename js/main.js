@@ -122,13 +122,10 @@ function init() {
     robotAnim("idle", 1, 500);
     setTimeout(() => {
         document.getElementById("loadingText").innerText = "TAP TO ENTER";
-        document.getElementById("loadingDiv").onclick = enableAudio;
+        document.getElementById("loadingDiv").onclick = startApp();
     }, 1000);
     robotImg.onclick = tapRobot; 
 
-    setTimeout(() => {
-        forceFullScreen();
-    }, 1000);
 
     setInterval(() => {
         const currentDate = new Date();
@@ -138,7 +135,9 @@ function init() {
 }
 
 // Enable Audio
-function enableAudio() {  
+function startApp() {  
+    forceFullScreen();
+
     audio.volume = 1;
     audio.src = "../public/audio/beep.wav";
     audio.play();
