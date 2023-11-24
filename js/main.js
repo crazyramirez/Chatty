@@ -103,6 +103,19 @@ function formatTime(date) {
     return formattedTime;
 }
 
+function forceFullScreen() { 
+    var elemento = document.documentElement; // Esto selecciona el elemento raíz (todo el documento HTML).
+    if (elemento.requestFullscreen) {
+        elemento.requestFullscreen(); // Solicita entrar en modo pantalla completa.
+    } else if (elemento.mozRequestFullScreen) {
+        elemento.mozRequestFullScreen(); // Para navegadores Firefox.
+    } else if (elemento.webkitRequestFullscreen) {
+        elemento.webkitRequestFullscreen(); // Para navegadores basados en WebKit, como Chrome y Safari.
+    } else if (elemento.msRequestFullscreen) {
+        elemento.msRequestFullscreen(); // Para navegadores Internet Explorer.
+    }
+}
+
 // Init APP
 function init() {  
     // setupCamera();
@@ -112,6 +125,8 @@ function init() {
         document.getElementById("loadingDiv").onclick = enableAudio;
     }, 1000);
     robotImg.onclick = tapRobot; 
+
+    forceFullScreen();
 
     setInterval(() => {
         const currentDate = new Date();
