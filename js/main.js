@@ -122,7 +122,7 @@ function init() {
     robotAnim("idle", 1, 500);
     setTimeout(() => {
         document.getElementById("loadingText").innerText = "TAP TO ENTER";
-        document.getElementById("loadingDiv").onclick = startApp();
+        document.getElementById("loadingDiv").onclick = startApp;
     }, 1000);
     robotImg.onclick = tapRobot; 
 
