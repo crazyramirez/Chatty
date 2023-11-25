@@ -126,7 +126,7 @@ app.post('/upload-audio', upload.single('audio'), async (req, res) => {
 
         await sendMessageToOpenAI(clientId, transcription.text);
         // OpenAI Chat Generation Received Text
-        res.status(200).json({ error: 'Enviado' });
+        res.status(200).json({ message: 'Operación exitosa' });
 
     } catch (error) {
         console.error('Error al procesar la transcripción:', error);
