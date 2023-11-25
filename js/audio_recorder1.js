@@ -130,7 +130,7 @@ function record(){
 
 // Upload Recorded Audio to Server
 let sendEnabled = true;
-async function uploadAudioToServer(audioBlob) {
+function uploadAudioToServer(audioBlob) {
 
     if (!sendEnabled) {
         console.log('SEND Disabled.');
