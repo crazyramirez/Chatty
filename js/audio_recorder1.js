@@ -138,7 +138,7 @@ function uploadAudioToServer(audioBlob) {
     }
 
     console.log("Recording Duration: " + RECORDING_TIME + " seconds");
-    if (RECORDING_TIME < 2) 
+    if (RECORDING_TIME < 1) 
         return;
 
     console.log("Send Recording to Server");
