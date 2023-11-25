@@ -113,13 +113,13 @@ app.post('/upload-audio', upload.single('audio'), async (req, res) => {
             return;
 
         // Delete recorded File
-        fs.unlink("public/recordings/" + clientId + '_recording.wav', (err) => {
-            if (err) {
-                console.error('Error al eliminar el archivo:', err);
-            } else {
-                console.log('Archivo eliminado con éxito');
-            }
-        });
+        // fs.unlink("public/recordings/" + clientId + '_recording.wav', (err) => {
+        //     if (err) {
+        //         console.error('Error al eliminar el archivo:', err);
+        //     } else {
+        //         console.log('Archivo eliminado con éxito');
+        //     }
+        // });
 
         io.to(clientId).emit("text-send", {text: transcription.text});
         io.to(clientId).emit("gpt-thinking");
