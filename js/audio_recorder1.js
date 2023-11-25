@@ -130,48 +130,43 @@ function record(){
 
 // Upload Recorded Audio to Server
 let sendEnabled = true;
-let uploading = false; // Variable de estado para evitar repeticiones
-
 function uploadAudioToServer(audioBlob) {
+
     if (!sendEnabled) {
         console.log('SEND Disabled.');
         return;
     }
 
-    // Evitar repeticiones
-    if (uploading) {
-        console.log('Ya se está cargando, evitando duplicados.');
-        return;
-    }
-
     console.log("Recording Duration: " + RECORDING_TIME + " seconds");
-    if (RECORDING_TIME < 1) 
+    if (RECORDING_TIME < 2) 
         return;
 
     console.log("Send Recording to Server");
 
-    // Crear una Blob a partir de audioBlob si no está en el formato correcto
+    // Create a Blob from audioBlob if it's not already in the correct format
     const blob = audioBlob instanceof Blob ? audioBlob : new Blob([audioBlob], { type: 'audio/wav' });
     const formData = new FormData();
     formData.append('audio', blob, 'recording.wav');
     formData.append("clientId", localStorage.getItem("clientId"));
 
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', '/upload-audio', true);
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4) {
-            uploading = false; // Restablecer la variable de estado
-            if (xhr.status === 200) {
-                console.log('Éxito');
+    fetch('/upload-audio', {
+        method: 'POST',
+        body: formData
+    })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
             } else {
-                console.error('Error al enviar datos al servidor');
+                console.error('Error al enviar el audio al servidor.');
+                throw new Error('Error al enviar el audio al servidor.');
             }
-        }
-    };
-    xhr.send(formData);
-
-    // Cambiar el estado a "cargando" para evitar repeticiones
-    uploading = true;
+        })
+        .then(data => {
+            console.log('Audio enviado exitosamente al servidor.');
+        })
+        .catch(error => {
+            console.error('Error en la solicitud fetch:', error);
+        });
 
     sendEnabled = false;
     setTimeout(() => {

@@ -124,8 +124,12 @@ function init() {
         document.getElementById("loadingText").innerText = "TAP TO ENTER";
         document.getElementById("loadingDiv").onclick = startApp;
     }, 1000);
-    robotImg.onclick = tapRobot; 
 
+    $('[robotImg]').click(function() {
+        // Tu código para manejar el evento 'click' aquí
+        console.log('Se hizo clic en un elemento con el atributo tapRobot');
+        tapRobot();
+    });
 
     setInterval(() => {
         const currentDate = new Date();
