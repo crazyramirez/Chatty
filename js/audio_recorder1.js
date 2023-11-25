@@ -12,7 +12,8 @@ function init() {
     navigator.mediaDevices.getUserMedia({ audio: true })
     .then(stream => {
         MEDIA_RECORDER = new MediaRecorder(stream);
-        MEDIA_RECORDER.start();
+        // MEDIA_RECORDER.start();
+        MEDIA_RECORDER.start(1000);
         MEDIA_RECORDER.stop();
     });
 }
@@ -48,7 +49,7 @@ function record(){
     navigator.mediaDevices.getUserMedia({ audio: true })
     .then(stream => {
         MEDIA_RECORDER = new MediaRecorder(stream);
-        // MEDIA_RECORDER.stop();
+        MEDIA_RECORDER.stop();
         
         //start recording:
         MEDIA_RECORDER.start(1000);
@@ -128,11 +129,12 @@ function record(){
                 const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
                 uploadAudioToServer(audioBlob);
                 audioChunks = []; // Clear audioChunks after sending
+                IS_RECORDING = false;
+                RECORDING_TIME = 0;
+                clearInterval(RECORDING_INTERVAL);
+                MEDIA_RECORDER = null;
             }
 
-            IS_RECORDING = false;
-            RECORDING_TIME = 0;
-            clearInterval(RECORDING_INTERVAL);
         });
 
     });
@@ -148,9 +150,9 @@ function uploadAudioToServer(audioBlob) {
     console.log("Send Recording to Server");
 
     // Create a Blob from audioBlob if it's not already in the correct format
-    const blob = audioBlob instanceof Blob ? audioBlob : new Blob([audioBlob], { type: 'audio/wav' });
+    // const blob = audioBlob instanceof Blob ? audioBlob : new Blob([audioBlob], { type: 'audio/wav' });
     const formData = new FormData();
-    formData.append('audio', blob, 'recording.wav');
+    formData.append('audio', audioBlob, 'recording.wav');
     formData.append("clientId", localStorage.getItem("clientId"));
 
     fetch('/upload-audio', {

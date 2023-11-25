@@ -57,12 +57,8 @@ socket.on('disconnect', function(args) {
     socket.emit("disconnectClient", localStorage.getItem("id", args.id));
 });
 
-let robotSpeechExecuted = false;
-socket.on('text-received', function(args) {
-    if (!robotSpeechExecuted) {
-        robotSpeech(args.text);
-        robotSpeechExecuted = true;
-    }
+socket.on('create-paragraph', function(args) {
+    // robotSpeech(args.text);
     createParagraph(args.text, "response");
     console.log(args.text);
 });
@@ -202,39 +198,21 @@ async function tapRobot() {
     document.getElementById("loader-2").style.display = "none";
     animRobotImg();
 
+    audio.src = "../public/audio/beep.wav";
+    audio.play();
     setTimeout(() => {
-        let rndInt1 = Math.floor(Math.random() * 4) + 1;
-        // let salute;
-        // if (rndInt1 === 1)
-        // {
-        //     salute = "Te escucho";
-        // } else if (rndInt1 ===  2) {
-        //     salute = "Dime";
-        // } else if (rndInt1 ===  3) {
-        //     salute = "¿Sí?";
-        // } else if (rndInt1 ===  4) {
-        //     salute = "Cuéntame";
-        // }
-        // robotSpeech(salute);
+        startRecording(); 
+    }, 200);
 
-        audio.src = "../public/audio/beep.wav";
-        audio.play();
-
-        setTimeout(() => {
-            document.getElementById("mic-icon").style.visibility = "visible";
-            startRecording();
-            // lastExpression = "Neutral";
-            // detectInterval = setInterval(() => {
-            //     detectFace();
-            // }, 1000);
-        }, 300);
-    }, 100);
+    setTimeout(() => {
+        document.getElementById("mic-icon").style.visibility = "visible"; 
+    }, 400);
 
     tapEnanbled = false;
     setTimeout(() => {
         tapEnanbled = true;
         console.log('TAP Robot Enabled');
-    }, 3000);
+    }, 1000);
 }
 
 let images;
