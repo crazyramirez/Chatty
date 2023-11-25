@@ -103,57 +103,7 @@ function formatTime(date) {
     return formattedTime;
 }
 
-function setVolume() {
-    navigator.bluetooth.requestDevice({
-        acceptAllDevices: true,
-        optionalServices: ['battery_service'] // Ajusta esto según los servicios del altavoz Bluetooth
-      })
-      .then(device => {
-        // Conectar al dispositivo Bluetooth
-        return device.gatt.connect();
-      })
-      .then(server => {
-        // Trabajar con el servidor Bluetooth aquí
-      })
-      .catch(error => {
-        console.error('Error al conectar al dispositivo Bluetooth:', error);
-      });
-
-    return;
-
-    console.log("Volume");
-
-    document.getElementById('increaseVolume').addEventListener('click', () => {
-        // Aumentar el volumen en un 5%
-        adjustVolume(5);
-    });
-
-    document.getElementById('decreaseVolume').addEventListener('click', () => {
-        // Reducir el volumen en un 5%
-        adjustVolume(-5);
-    });
-
-    function adjustVolume(percentage) {
-        console.log("Volume" + percentage);
-        fetch('/setVolume', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ volumePercentage: percentage })
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data.message); // Mensaje de confirmación del servidor
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    }
-}
-
 function forceFullScreen() {
-    return;
     var elemento = document.documentElement;
     if (elemento.requestFullscreen) {
         elemento.requestFullscreen();
@@ -170,8 +120,6 @@ function forceFullScreen() {
 function init() {  
     // setupCamera();
     robotAnim("idle", 1, 500);
-    setVolume();
-
     setTimeout(() => {
         document.getElementById("loadingText").innerText = "TAP TO ENTER";
         document.getElementById("loadingDiv").onclick = startApp;

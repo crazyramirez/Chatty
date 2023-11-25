@@ -92,34 +92,6 @@ app.post('/speech', function(req, res) {
 });
 
 
-// Set Volume
-app.post('/setVolume', (req, res) => {
-    const { volumePercentage } = req.body;
-
-    if (typeof volumePercentage !== 'number') {
-        res.status(400).json({ error: 'Porcentaje de volumen no válido' });
-        return;
-    }
-
-    // Asegúrate de que el porcentaje esté dentro del rango válido (0-100)
-    const adjustedVolume = Math.min(Math.max(volumePercentage, 0), 100);
-
-    const command = `amixer sset Master ${adjustedVolume}%`;
-
-    exec(command, (error, stdout, stderr) => {
-        if (error) {
-            console.error(`Error al ajustar el volumen: ${error.message}`);
-            res.status(500).json({ error: 'Error al ajustar el volumen' });
-            return;
-        }
-
-        console.log(`Volumen ajustado a ${adjustedVolume}%`);
-        res.json({ message: `Volumen ajustado a ${adjustedVolume}%` });
-    });
-});
-
-
-
 // Multer
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
