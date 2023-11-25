@@ -35,6 +35,8 @@ function stopRecording(){
     console.log("Stop Recording");
 }
 
+let sendEnabled = true;
+
 // Record
 function record(){
 
@@ -110,6 +112,11 @@ function record(){
         //stop event:
         MEDIA_RECORDER.addEventListener('stop', () => {
             console.log("Stop Audio Recording");
+
+            if (!sendEnabled) {
+                console.log('SEND Disabled.');
+                return;
+            }
             //stop all the tracks:
             setTimeout(() => {
                 document.getElementById("mic-icon").classList.remove("show");
@@ -130,13 +137,7 @@ function record(){
 
 
 // Upload Recorded Audio to Server
-let sendEnabled = true;
 function uploadAudioToServer(audioBlob) {
-
-    if (!sendEnabled) {
-        console.log('SEND Disabled.');
-        return;
-    }
 
     console.log("Recording Duration: " + RECORDING_TIME + " seconds");
     if (RECORDING_TIME < 2) 
