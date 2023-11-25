@@ -12,7 +12,6 @@ function init() {
     navigator.mediaDevices.getUserMedia({ audio: true })
     .then(stream => {
         MEDIA_RECORDER = new MediaRecorder(stream);
-        // MEDIA_RECORDER.start();
         MEDIA_RECORDER.start(1000);
         MEDIA_RECORDER.stop();
     });

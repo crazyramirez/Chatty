@@ -121,7 +121,9 @@ app.post('/upload-audio', upload.single('audio'), async (req, res) => {
         //     }
         // });
 
-        io.to(clientId).emit("text-send", {text: transcription.text});
+        // Create Paragraph
+        io.to(clientId).emit("create-paragraph", {text: transcription.text, type: "message"});
+        // Robot Thinking
         io.to(clientId).emit("gpt-thinking");
 
         await sendMessageToOpenAI(clientId, transcription.text);
@@ -138,46 +140,50 @@ const messageHistories = {};
 // Función para enviar un mensaje a OpenAI
 async function sendMessageToOpenAI(clientId, message) {
     try {
-        // Obtiene el historial de mensajes del cliente o inicializa uno si es nuevo
+        // Get History Array
         const messageHistory = messageHistories[clientId] || [];
-
         if (messageHistory.length >= 5) {
             messageHistory.shift();
         }
         
-        // Agrega el nuevo mensaje al historial
+        // Add Message History Array
         messageHistory.push({ role: 'user', content: message });
 
-        // Realiza una consulta a OpenAI con el historial completo
+        // Ask OpenAI API
         const response = await openai.chat.completions.create({
             model: 'gpt-3.5-turbo',
             messages: messageHistory,
             max_tokens: 100,
         });
 
-        // Agrega la respuesta de OpenAI al historial
+        // Add response to History Array
         messageHistory.push({ role: 'assistant', content: response.choices[0].message.content });
 
-        // Actualiza el historial del cliente
+        // Message History
         messageHistories[clientId] = messageHistory;
 
         console.log("Response: " + response.choices[0].message.content);
 
         // Socket Emit
-        io.to(clientId).emit("create-paragraph", {text: response.choices[0].message.content});
+        io.to(clientId).emit("create-paragraph", {text: response.choices[0].message.content, type: "response"});
 
         // Speech
-        const textToSave = response.choices[0].message.content;
-        io.to(clientId).emit("gpt-thinking");
-        var filepath = path.join(__dirname, "/public/recordings/" + clientId + '_response.wav');
-        console.log("Speech TEXT: " + textToSave);
-        gtts.save(filepath, textToSave, function () {
-            console.log("Speech SAVED");
-            io.to(clientId).emit("play-audio");
-        });
+        const speechMessage = response.choices[0].message.content;
+        speech(clientId, speechMessage);
+
+        // Robot Thinking
+        // io.to(clientId).emit("gpt-thinking");
 
     } catch (error) {
         console.error('Error al enviar mensaje a OpenAI:', error);
         return 'Ocurrió un error al procesar la solicitud';
     }
+}
+
+function speech(clientId, speechMessage) {  
+    var filepath = path.join(__dirname, "/public/recordings/" + clientId + '_response.wav');
+    gtts.save(filepath, speechMessage, function () {
+        console.log("Speech SAVED" + speechMessage);
+        io.to(clientId).emit("play-audio");
+    });
 }

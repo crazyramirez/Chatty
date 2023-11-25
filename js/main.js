@@ -58,19 +58,12 @@ socket.on('disconnect', function(args) {
 });
 
 socket.on('create-paragraph', function(args) {
-    // robotSpeech(args.text);
-    createParagraph(args.text, "response");
+    createParagraph(args.text, args.type);
     console.log(args.text);
-});
-
-socket.on('text-send', function(args) {
-    console.log(args.text);
-    createParagraph(args.text, "message");
 });
 
 socket.on('gpt-thinking', function() {
     document.getElementById("loader-2").style.display = "block";
-
 });
 
 socket.on('play-audio', function() {
@@ -104,6 +97,7 @@ function formatTime(date) {
 }
 
 function forceFullScreen() {
+    return;
     var elemento = document.documentElement;
     if (elemento.requestFullscreen) {
         elemento.requestFullscreen();
