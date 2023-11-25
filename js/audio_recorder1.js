@@ -149,24 +149,37 @@ function uploadAudioToServer(audioBlob) {
     formData.append('audio', blob, 'recording.wav');
     formData.append("clientId", localStorage.getItem("clientId"));
 
-    fetch('/upload-audio', {
-        method: 'POST',
-        body: formData
-    })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/upload-audio', true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                console.log('Éxito');
             } else {
-                console.error('Error al enviar el audio al servidor.');
-                throw new Error('Error al enviar el audio al servidor.');
+                console.error('Error al enviar datos al servidor');
             }
-        })
-        .then(data => {
-            console.log('Audio enviado exitosamente al servidor.');
-        })
-        .catch(error => {
-            console.error('Error en la solicitud fetch:', error);
-        });
+        }
+    };
+    xhr.send(formData);
+
+    // fetch('/upload-audio', {
+    //     method: 'POST',
+    //     body: formData
+    // })
+    //     .then(response => {
+    //         if (response.ok) {
+    //             return response.json();
+    //         } else {
+    //             console.error('Error al enviar el audio al servidor.');
+    //             throw new Error('Error al enviar el audio al servidor.');
+    //         }
+    //     })
+    //     .then(data => {
+    //         console.log('Audio enviado exitosamente al servidor.');
+    //     })
+    //     .catch(error => {
+    //         console.error('Error en la solicitud fetch:', error);
+    //     });
 
     sendEnabled = false;
     setTimeout(() => {
