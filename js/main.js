@@ -110,28 +110,11 @@ function forceFullScreen() {
     }
 }
 
-function absorbEvent_(event) {
-    var e = event || window.event;
-    e.preventDefault && e.preventDefault();
-    e.stopPropagation && e.stopPropagation();
-    e.cancelBubble = true;
-    e.returnValue = false;
-    return false;
-  }
-  function preventLongPressMenu(nodes) {
-    for(var i=0; i<nodes.length; i++){
-       nodes[i].ontouchstart = absorbEvent_;
-       nodes[i].ontouchmove = absorbEvent_;
-       nodes[i].ontouchend = absorbEvent_;
-       nodes[i].ontouchcancel = absorbEvent_;
-    }
-  }
+
 
 // Init APP
 function init() {  
     // setupCamera();
-    preventLongPressMenu(document.getElementsByTagName('body img'));
-    preventLongPressMenu(document.body);
 
     document.body.style.cursor = "none";
     robotAnim("idle", 1, 500);
