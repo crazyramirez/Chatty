@@ -57,10 +57,14 @@ socket.on('disconnect', function(args) {
     socket.emit("disconnectClient", localStorage.getItem("id", args.id));
 });
 
+let robotSpeechExecuted = false;
 socket.on('text-received', function(args) {
-    console.log(args.text);
-    robotSpeech(args.text);
+    if (!robotSpeechExecuted) {
+        robotSpeech(args.text);
+        robotSpeechExecuted = true;
+    }
     createParagraph(args.text, "response");
+    console.log(args.text);
 });
 
 socket.on('text-send', function(args) {
