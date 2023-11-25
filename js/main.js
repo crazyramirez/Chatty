@@ -166,7 +166,8 @@ async function tapRobot() {
         animRobotImg();
         document.getElementById("loader-2").style.display = "none";
         setTimeout(() => {
-            audio.src = "../public/audio/beep2.wav";
+            audio.src = "../public/audio/beep.wav";
+            // audio.src = "../public/audio/beep2.wav";
             audio.play(); 
         }, 100);
         return;
@@ -176,7 +177,8 @@ async function tapRobot() {
     {
         MEDIA_RECORDER.stop();
         setTimeout(() => {
-            audio.src = "../public/audio/beep2.wav";
+            audio.src = "../public/audio/beep.wav";
+            // audio.src = "../public/audio/beep2.wav";
             audio.play(); 
         }, 100);
         animRobotImg();
