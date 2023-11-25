@@ -165,7 +165,6 @@ function uploadAudioToServer(audioBlob) {
         })
         .then(data => {
             console.log('Audio enviado exitosamente al servidor.');
-            formData = null;
         })
         .catch(error => {
             console.error('Error en la solicitud fetch:', error);
