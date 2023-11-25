@@ -110,9 +110,19 @@ function forceFullScreen() {
     }
 }
 
+function preventLongPressMenu(node) {
+    node.on('touchstart', absorbEvent_);
+    node.on('touchmove', absorbEvent_);
+    node.on('touchend', absorbEvent_);
+    node.on('touchcancel', absorbEvent_);
+}
+
 // Init APP
 function init() {  
     // setupCamera();
+    preventLongPressMenu(document.getElementByTagName('body img'));
+    preventLongPressMenu(document.body);
+
     document.body.style.cursor = "none";
     robotAnim("idle", 1, 500);
     setTimeout(() => {
