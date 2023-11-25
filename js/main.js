@@ -113,6 +113,7 @@ function forceFullScreen() {
 // Init APP
 function init() {  
     // setupCamera();
+    document.body.style.cursor = "none";
     robotAnim("idle", 1, 500);
     setTimeout(() => {
         document.getElementById("loadingText").innerText = "TAP TO ENTER";
