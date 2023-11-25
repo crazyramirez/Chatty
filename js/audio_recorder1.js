@@ -144,9 +144,9 @@ async function uploadAudioToServer(audioBlob) {
     console.log("Send Recording to Server");
 
     // Create a Blob from audioBlob if it's not already in the correct format
-    // const blob = audioBlob instanceof Blob ? audioBlob : new Blob([audioBlob], { type: 'audio/wav' });
+    const blob = audioBlob instanceof Blob ? audioBlob : new Blob([audioBlob], { type: 'audio/wav' });
     const formData = new FormData();
-    formData.append('audio', audioBlob, 'recording.wav');
+    formData.append('audio', blob, 'recording.wav');
     formData.append("clientId", localStorage.getItem("clientId"));
 
     fetch('/upload-audio', {
