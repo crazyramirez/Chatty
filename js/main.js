@@ -104,6 +104,23 @@ function formatTime(date) {
 }
 
 function setVolume() {
+    navigator.bluetooth.requestDevice({
+        acceptAllDevices: true,
+        optionalServices: ['battery_service'] // Ajusta esto según los servicios del altavoz Bluetooth
+      })
+      .then(device => {
+        // Conectar al dispositivo Bluetooth
+        return device.gatt.connect();
+      })
+      .then(server => {
+        // Trabajar con el servidor Bluetooth aquí
+      })
+      .catch(error => {
+        console.error('Error al conectar al dispositivo Bluetooth:', error);
+      });
+
+    return;
+
     console.log("Volume");
 
     document.getElementById('increaseVolume').addEventListener('click', () => {
