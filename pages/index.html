@@ -57,7 +57,7 @@
 
     <body>
         <!-- Loading DIV -->
-        <div id="loadingDiv">
+        <div id="loadingDiv" style="display: none;">
             <p id="loadingText" class="font-weight-light">L O A D I N G</p>
             <span class="loader"></span>
         </div>
@@ -95,6 +95,11 @@
                 <p class="message show">¿Cual es la capital de España?</p>
                 <p class="response show">Hola, la capital de España es Madrid.<br>¿Te puedo ayudar en otra cosa más?</p> -->
             </div> 
+
+            <div class="volume-buttons">
+                <button id="increaseVolume">+</button>
+                <button id="decreaseVolume">-</button>            
+            </div>
         </div>
 
         <audio id="audio" controls="none" style="display: none;">

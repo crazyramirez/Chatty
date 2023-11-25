@@ -289,6 +289,21 @@ html, body {
     margin-bottom: 2px;
 }
 
+.volume-buttons {
+    position: absolute;
+}
+
+.volume-buttons button {
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+    background-color: #55555581;
+    font-size: x-large;
+    font-weight: bold;
+    color: white;
+    align-content: center;
+}
 
 @media only screen and (max-width: 600px) {
     .main-container {
