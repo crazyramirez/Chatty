@@ -110,17 +110,27 @@ function forceFullScreen() {
     }
 }
 
-function preventLongPressMenu(node) {
-    node.on('touchstart', absorbEvent_);
-    node.on('touchmove', absorbEvent_);
-    node.on('touchend', absorbEvent_);
-    node.on('touchcancel', absorbEvent_);
-}
+function absorbEvent_(event) {
+    var e = event || window.event;
+    e.preventDefault && e.preventDefault();
+    e.stopPropagation && e.stopPropagation();
+    e.cancelBubble = true;
+    e.returnValue = false;
+    return false;
+  }
+  function preventLongPressMenu(nodes) {
+    for(var i=0; i<nodes.length; i++){
+       nodes[i].ontouchstart = absorbEvent_;
+       nodes[i].ontouchmove = absorbEvent_;
+       nodes[i].ontouchend = absorbEvent_;
+       nodes[i].ontouchcancel = absorbEvent_;
+    }
+  }
 
 // Init APP
 function init() {  
     // setupCamera();
-    preventLongPressMenu(document.getElementByTagName('body img'));
+    preventLongPressMenu(document.getElementsByTagName('body img'));
     preventLongPressMenu(document.body);
 
     document.body.style.cursor = "none";
