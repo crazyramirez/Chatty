@@ -117,19 +117,22 @@ function record(){
                 console.log('SEND Disabled.');
                 return;
             }
-            //stop all the tracks:
+
+            // Stop all the tracks:
             setTimeout(() => {
                 document.getElementById("mic-icon").classList.remove("show");
             }, 300);
             stream.getTracks().forEach(track => track.stop());
-            // stream = null;
-            const audioBlob = new Blob(audioChunks, {'type': 'audio/wav'});
-            uploadAudioToServer(audioBlob);
+
+            if (audioChunks.length > 0) {
+                const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                uploadAudioToServer(audioBlob);
+                audioChunks = []; // Clear audioChunks after sending
+            }
 
             IS_RECORDING = false;
             RECORDING_TIME = 0;
             clearInterval(RECORDING_INTERVAL);
-
         });
 
     });
@@ -138,7 +141,6 @@ function record(){
 
 // Upload Recorded Audio to Server
 function uploadAudioToServer(audioBlob) {
-
     console.log("Recording Duration: " + RECORDING_TIME + " seconds");
     if (RECORDING_TIME < 2) 
         return;
