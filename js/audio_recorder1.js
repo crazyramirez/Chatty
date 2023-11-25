@@ -116,13 +116,12 @@ function record(){
             }, 300);
             stream.getTracks().forEach(track => track.stop());
             // stream = null;
+            const audioBlob = new Blob(audioChunks, {'type': 'audio/wav'});
+            uploadAudioToServer(audioBlob);
 
             IS_RECORDING = false;
             RECORDING_TIME = 0;
             clearInterval(RECORDING_INTERVAL);
-
-            const audioBlob = new Blob(audioChunks, {'type': 'audio/wav'});
-            uploadAudioToServer(audioBlob);
 
         });
 
