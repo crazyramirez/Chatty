@@ -134,7 +134,7 @@ function init() {
 
 // Enable Audio
 function startApp() {  
-    forceFullScreen();
+    // forceFullScreen();
 
     audio.volume = 1;
     audio.src = "../public/audio/beep.wav";
