@@ -36,6 +36,7 @@ function stopRecording(){
 }
 
 let sendEnabled = true;
+let audioChunks = [];
 
 // Record
 function record(){
@@ -53,7 +54,6 @@ function record(){
         MEDIA_RECORDER.start(1000);
         
         //save audio chunks:
-        const audioChunks = [];
         MEDIA_RECORDER.addEventListener("dataavailable", event => {
             audioChunks.push(event.data);
         });
