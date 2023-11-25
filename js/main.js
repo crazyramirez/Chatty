@@ -125,9 +125,9 @@ function init() {
         document.getElementById("loadingDiv").onclick = startApp;
     }, 1000);
 
-    $('#robotImg').click(function() {
+    $('#robot-img').click(function() {
         // Tu código para manejar el evento 'click' aquí
-        console.log('Se hizo clic en un elemento con el atributo tapRobot');
+        console.log('tapRobot');
         tapRobot();
     });
 
