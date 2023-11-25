@@ -140,7 +140,7 @@ async function sendMessageToOpenAI(clientId, message) {
         // Obtiene el historial de mensajes del cliente o inicializa uno si es nuevo
         const messageHistory = messageHistories[clientId] || [];
 
-        if (messageHistory.length >= 5) {
+        if (messageHistory.length >= 1) {
             messageHistory.shift();
         }
         
