@@ -116,13 +116,13 @@ function record(){
             }, 300);
             stream.getTracks().forEach(track => track.stop());
             // stream = null;
-            
-            const audioBlob = new Blob(audioChunks, {'type': 'audio/wav'});
-            uploadAudioToServer(audioBlob);
 
             IS_RECORDING = false;
             RECORDING_TIME = 0;
             clearInterval(RECORDING_INTERVAL);
+
+            const audioBlob = new Blob(audioChunks, {'type': 'audio/wav'});
+            uploadAudioToServer(audioBlob);
 
         });
 
@@ -145,20 +145,15 @@ function uploadAudioToServer(audioBlob) {
 
     console.log("Send Recording to Server");
 
-    const clientId = localStorage.getItem("clientId");
-
-    // Crear un objeto JSON que contenga clientId y audioBlob
-    const requestBody = {
-        clientId: clientId,
-        audio: audioBlob
-    };
+    // Create a Blob from audioBlob if it's not already in the correct format
+    const blob = audioBlob instanceof Blob ? audioBlob : new Blob([audioBlob], { type: 'audio/wav' });
+    const formData = new FormData();
+    formData.append('audio', blob, 'recording.wav');
+    formData.append("clientId", localStorage.getItem("clientId"));
 
     fetch('/upload-audio', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json' // Establecer el tipo de contenido como JSON
-        },
-        body: JSON.stringify(requestBody) // Convertir el objeto a una cadena JSON
+        body: formData
     })
         .then(response => {
             if (response.ok) {
@@ -170,6 +165,7 @@ function uploadAudioToServer(audioBlob) {
         })
         .then(data => {
             console.log('Audio enviado exitosamente al servidor.');
+            formData = null;
         })
         .catch(error => {
             console.error('Error en la solicitud fetch:', error);
