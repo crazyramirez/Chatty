@@ -130,10 +130,17 @@ function record(){
 
 // Upload Recorded Audio to Server
 let sendEnabled = true;
-function uploadAudioToServer(audioBlob) {
+let uploading = false; // Variable de estado para evitar repeticiones
 
+function uploadAudioToServer(audioBlob) {
     if (!sendEnabled) {
         console.log('SEND Disabled.');
+        return;
+    }
+
+    // Evitar repeticiones
+    if (uploading) {
+        console.log('Ya se está cargando, evitando duplicados.');
         return;
     }
 
@@ -143,7 +150,7 @@ function uploadAudioToServer(audioBlob) {
 
     console.log("Send Recording to Server");
 
-    // Create a Blob from audioBlob if it's not already in the correct format
+    // Crear una Blob a partir de audioBlob si no está en el formato correcto
     const blob = audioBlob instanceof Blob ? audioBlob : new Blob([audioBlob], { type: 'audio/wav' });
     const formData = new FormData();
     formData.append('audio', blob, 'recording.wav');
@@ -153,6 +160,7 @@ function uploadAudioToServer(audioBlob) {
     xhr.open('POST', '/upload-audio', true);
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
+            uploading = false; // Restablecer la variable de estado
             if (xhr.status === 200) {
                 console.log('Éxito');
             } else {
@@ -162,24 +170,8 @@ function uploadAudioToServer(audioBlob) {
     };
     xhr.send(formData);
 
-    // fetch('/upload-audio', {
-    //     method: 'POST',
-    //     body: formData
-    // })
-    //     .then(response => {
-    //         if (response.ok) {
-    //             return response.json();
-    //         } else {
-    //             console.error('Error al enviar el audio al servidor.');
-    //             throw new Error('Error al enviar el audio al servidor.');
-    //         }
-    //     })
-    //     .then(data => {
-    //         console.log('Audio enviado exitosamente al servidor.');
-    //     })
-    //     .catch(error => {
-    //         console.error('Error en la solicitud fetch:', error);
-    //     });
+    // Cambiar el estado a "cargando" para evitar repeticiones
+    uploading = true;
 
     sendEnabled = false;
     setTimeout(() => {
