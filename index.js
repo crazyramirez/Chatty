@@ -82,12 +82,12 @@ const openai= new OpenAI({
 app.post('/speech', function(req, res) {
     const textToSave = req.body.textMsg;
     const clientId = req.body.clientId;
-    io.to(clientId).emit("gpt-thinking");
+    io.to(clientId).once("gpt-thinking");
     var filepath = path.join(__dirname, "/public/recordings/" + clientId + '_response.wav');
     console.log("Speech TEXT: " + textToSave);
     gtts.save(filepath, textToSave, function () {
         console.log("Speech SAVED");
-        io.to(clientId).emit("play-audio");
+        io.to(clientId).once("play-audio");
     });
 });
 
@@ -121,8 +121,8 @@ app.post('/upload-audio', upload.single('audio'), async (req, res) => {
         //     }
         // });
 
-        io.to(clientId).emit("text-send", {text: transcription.text});
-        io.to(clientId).emit("gpt-thinking");
+        io.to(clientId).once("text-send", {text: transcription.text});
+        io.to(clientId).once("gpt-thinking");
 
         await sendMessageToOpenAI(clientId, transcription.text);
         // OpenAI Chat Generation Received Text
@@ -164,7 +164,7 @@ async function sendMessageToOpenAI(clientId, message) {
         console.log("Response: " + response.choices[0].message.content);
 
         // Socket Emit
-        io.to(clientId).emit("text-received", {text: response.choices[0].message.content});
+        io.to(clientId).once("text-received", {text: response.choices[0].message.content});
 
     } catch (error) {
         console.error('Error al enviar mensaje a OpenAI:', error);
