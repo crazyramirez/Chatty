@@ -97,7 +97,7 @@ function formatTime(date) {
 }
 
 function forceFullScreen() {
-    // return;
+    return;
     var elemento = document.documentElement;
     if (elemento.requestFullscreen) {
         elemento.requestFullscreen();
